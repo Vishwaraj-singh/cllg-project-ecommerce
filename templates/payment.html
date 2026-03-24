@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Order Summary — MyStore{% endblock %}
+
+{% block content %}
+<!-- Progress indicator -->
+<div class="d-flex align-items-center gap-2 mb-4 text-muted small">
+    <span>1. Shipping</span>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-dark fw-semibold">2. Review & Confirm</span>
+    <i class="bi bi-chevron-right"></i>
+    <span>3. Confirmation</span>
+</div>
+
+<h2 class="fw-bold mb-4">Review Your Order</h2>
+
+<div class="row g-4 justify-content-center">
+
+    <!-- Left: Order summary -->
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">
+                <i class="bi bi-receipt"></i> Order Summary
+            </div>
+            <div class="card-body">
+                {% for item in cart_items %}
+                <div class="d-flex justify-content-between small mb-2">
+                    <span>{{ item.product.name }} &times;{{ item.quantity }}</span>
+                    <span>&#8377;{{ "%.2f"|format(item.product.price * item.quantity) }}</span>
+                </div>
+                {% endfor %}
+                <hr class="my-2">
+                <div class="d-flex justify-content-between fw-bold fs-5">
+                    <span>Total</span>
+                    <span class="text-success">&#8377;{{ "%.2f"|format(total) }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right: COD confirmation -->
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4 text-center">
+                <i class="bi bi-truck fs-1 text-dark mb-3 d-block"></i>
+                <h5 class="fw-bold mb-1">Cash on Delivery</h5>
+                <p class="text-muted small mb-4">
+                    Pay <strong>&#8377;{{ "%.2f"|format(total) }}</strong> in cash when your order arrives.
+                </p>
+
+                <form method="POST">
+                    <button type="submit" class="btn btn-dark btn-lg w-100 fw-bold">
+                        <i class="bi bi-bag-check-fill"></i> Place Order
+                    </button>
+                </form>
+
+                <a href="{{ url_for('view_cart') }}" class="btn btn-outline-secondary w-100 mt-2">
+                    <i class="bi bi-arrow-left"></i> Back to Cart
+                </a>
+
+                <p class="text-muted small mt-3">
+                    <i class="bi bi-shield-check text-success"></i>
+                    No advance payment required
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

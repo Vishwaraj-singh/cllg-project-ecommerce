@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Register — MyStore{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h3 class="card-title text-center mb-4 fw-bold">Create Account</h3>
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+
+                    <!-- Username -->
+                    <div class="mb-3">
+                        {{ form.username.label(class="form-label") }}
+                        {{ form.username(class="form-control", placeholder="e.g. john123") }}
+                        {% for err in form.username.errors %}
+                            <div class="text-danger small">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        {{ form.email.label(class="form-label") }}
+                        {{ form.email(class="form-control", placeholder="you@example.com") }}
+                        {% for err in form.email.errors %}
+                            <div class="text-danger small">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                        {{ form.password.label(class="form-label") }}
+                        {{ form.password(class="form-control", placeholder="Min. 6 characters") }}
+                        {% for err in form.password.errors %}
+                            <div class="text-danger small">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="mb-3">
+                        {{ form.confirm_password.label(class="form-label") }}
+                        {{ form.confirm_password(class="form-control", placeholder="Re-enter password") }}
+                        {% for err in form.confirm_password.errors %}
+                            <div class="text-danger small">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    {{ form.submit(class="btn btn-dark w-100") }}
+                </form>
+                <p class="text-center mt-3 small">Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

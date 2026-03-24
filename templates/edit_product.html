@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Edit Product — MyStore{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="bi bi-pencil-square"></i> Edit Product</h5>
+            </div>
+            <div class="card-body">
+                <!-- Current Image Preview -->
+                {% if product.image_url %}
+                <div class="text-center mb-3">
+                    <img src="{{ product.image_url }}" alt="Current Image"
+                         class="img-thumbnail" style="height: 180px; object-fit: cover;">
+                    <p class="text-muted small mt-1">Current image</p>
+                </div>
+                {% endif %}
+
+                <form method="POST" novalidate>
+                    {{ form.hidden_tag() }}
+
+                    <!-- Product Name -->
+                    <div class="mb-3">
+                        {{ form.name.label(class="form-label fw-semibold") }}
+                        {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else "")) }}
+                        {% for error in form.name.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        {{ form.description.label(class="form-label fw-semibold") }}
+                        {{ form.description(class="form-control" + (" is-invalid" if form.description.errors else ""), rows=3) }}
+                        {% for error in form.description.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Price -->
+                    <div class="mb-3">
+                        {{ form.price.label(class="form-label fw-semibold") }}
+                        <div class="input-group">
+                            <span class="input-group-text">&#8377;</span>
+                            {{ form.price(class="form-control" + (" is-invalid" if form.price.errors else "")) }}
+                            {% for error in form.price.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Image URL -->
+                    <div class="mb-3">
+                        {{ form.image_url.label(class="form-label fw-semibold") }}
+                        {{ form.image_url(class="form-control" + (" is-invalid" if form.image_url.errors else ""), placeholder="https://...") }}
+                        {% for error in form.image_url.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Stock -->
+                    <div class="mb-4">
+                        {{ form.stock.label(class="form-label fw-semibold") }}
+                        {{ form.stock(class="form-control" + (" is-invalid" if form.stock.errors else "")) }}
+                        {% for error in form.stock.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        {{ form.submit(class="btn btn-dark flex-fill") }}
+                        <a href="{{ url_for('home') }}" class="btn btn-outline-secondary flex-fill">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Checkout — MyStore{% endblock %}
+
+{% block content %}
+<!-- Progress indicator -->
+<div class="d-flex align-items-center gap-2 mb-4 text-muted small">
+    <span class="text-dark fw-semibold">1. Shipping</span>
+    <i class="bi bi-chevron-right"></i>
+    <span>2. Payment</span>
+    <i class="bi bi-chevron-right"></i>
+    <span>3. Confirmation</span>
+</div>
+
+<h2 class="fw-bold mb-4">Shipping Details</h2>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+
+                    <!-- Full Name -->
+                    <div class="mb-3">
+                        {{ form.full_name.label(class="form-label") }}
+                        {{ form.full_name(class="form-control", placeholder="John Doe") }}
+                        {% for err in form.full_name.errors %}
+                            <div class="text-danger small">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Address -->
+                    <div class="mb-3">
+                        {{ form.address.label(class="form-label") }}
+                        {{ form.address(class="form-control", placeholder="House no., Street, Area") }}
+                        {% for err in form.address.errors %}
+                            <div class="text-danger small">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- City + Pincode on same row -->
+                    <div class="row">
+                        <div class="col-7 mb-3">
+                            {{ form.city.label(class="form-label") }}
+                            {{ form.city(class="form-control", placeholder="Mumbai") }}
+                            {% for err in form.city.errors %}
+                                <div class="text-danger small">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-5 mb-3">
+                            {{ form.pincode.label(class="form-label") }}
+                            {{ form.pincode(class="form-control", placeholder="400001") }}
+                            {% for err in form.pincode.errors %}
+                                <div class="text-danger small">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="mb-4">
+                        {{ form.phone.label(class="form-label") }}
+                        {{ form.phone(class="form-control", placeholder="10-digit number") }}
+                        {% for err in form.phone.errors %}
+                            <div class="text-danger small">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    {{ form.submit(class="btn btn-dark w-100 btn-lg") }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

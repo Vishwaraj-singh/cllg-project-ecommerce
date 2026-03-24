@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} — MyStore{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+        <li class="breadcrumb-item active">{{ product.name }}</li>
+    </ol>
+</nav>
+
+<div class="row g-5 align-items-start">
+    <!-- Product Image -->
+    <div class="col-md-5">
+        <img src="{{ product.image_url }}" class="img-fluid rounded shadow" alt="{{ product.name }}">
+    </div>
+
+    <!-- Product Info -->
+    <div class="col-md-7">
+        <h2 class="fw-bold">{{ product.name }}</h2>
+        <p class="text-muted">{{ product.description }}</p>
+
+        <!-- Price -->
+        <h3 class="text-success fw-bold my-3">&#8377;{{ "%.2f"|format(product.price) }}</h3>
+
+        <!-- Stock -->
+        {% if product.stock > 0 %}
+            <span class="badge bg-success mb-3">In Stock ({{ product.stock }} left)</span>
+        {% else %}
+            <span class="badge bg-danger mb-3">Out of Stock</span>
+        {% endif %}
+
+        <!-- Buttons -->
+        <div class="d-flex gap-3 mt-3">
+            <a href="{{ url_for('add_to_cart', product_id=product.id) }}" class="btn btn-dark btn-lg">
+                <i class="bi bi-cart-plus"></i> Add to Cart
+            </a>
+            <a href="{{ url_for('home') }}" class="btn btn-outline-secondary btn-lg">
+                &larr; Back to Shop
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
