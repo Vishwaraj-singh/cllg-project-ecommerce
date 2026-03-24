@@ -4,7 +4,12 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold mb-0"><i class="bi bi-speedometer2"></i> Admin Dashboard</h2>
-    <span class="badge bg-danger fs-6">Logged in as Admin</span>
+    <div class="d-flex align-items-center gap-3">
+        <a href="{{ url_for('add_product') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Add Product
+        </a>
+        <span class="badge bg-danger fs-6">Logged in as Admin</span>
+    </div>
 </div>
 
 <!-- Stats Row -->
@@ -20,7 +25,7 @@
     <div class="col-sm-4">
         <div class="card text-center shadow-sm border-0 bg-success text-white">
             <div class="card-body py-3">
-                <div class="fs-2 fw-bold">{{ products|selectattr('stock', 'gt', 0)|list|length }}</div>
+                <div class="fs-2 fw-bold">{{ in_stock_count }}</div>
                 <div class="small text-white-50">In Stock</div>
             </div>
         </div>
@@ -28,12 +33,52 @@
     <div class="col-sm-4">
         <div class="card text-center shadow-sm border-0 bg-danger text-white">
             <div class="card-body py-3">
-                <div class="fs-2 fw-bold">{{ products|selectattr('stock', 'eq', 0)|list|length }}</div>
+                <div class="fs-2 fw-bold">{{ out_of_stock_count }}</div>
                 <div class="small text-white-50">Out of Stock</div>
             </div>
         </div>
     </div>
 </div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small text-uppercase">Total Units</div>
+                        <div class="fs-3 fw-bold">{{ total_units }}</div>
+                    </div>
+                    <span class="badge bg-dark-subtle text-dark">Inventory</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small text-uppercase">Low Stock Alerts</div>
+                        <div class="fs-3 fw-bold">{{ low_stock_products|length }}</div>
+                    </div>
+                    <span class="badge bg-warning text-dark">Needs Attention</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if low_stock_products %}
+<div class="alert alert-warning shadow-sm">
+    <div class="fw-semibold mb-1"><i class="bi bi-exclamation-triangle"></i> Low stock products</div>
+    <div class="small">
+        {% for product in low_stock_products %}
+            {{ product.name }} ({{ product.stock }} left){% if not loop.last %}, {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
 
 <!-- Products Table -->
 <div class="card shadow-sm">
@@ -48,8 +93,10 @@
                         <th>#</th>
                         <th>Image</th>
                         <th>Product Name</th>
+                        <th>Description</th>
                         <th>Price</th>
                         <th>Stock</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -62,6 +109,7 @@
                                  style="width: 60px; height: 50px; object-fit: contain; border-radius: 6px;">
                         </td>
                         <td class="fw-semibold">{{ product.name }}</td>
+                        <td class="text-muted small" style="min-width: 220px;">{{ product.description[:90] }}{% if product.description|length > 90 %}...{% endif %}</td>
                         <td class="text-success fw-bold">&#8377;{{ "%.2f"|format(product.price) }}</td>
                         <td>
                             {% if product.stock > 5 %}
@@ -73,18 +121,23 @@
                             {% endif %}
                         </td>
                         <td>
+                            {% if product.stock > 5 %}
+                                <span class="text-success fw-semibold">Available</span>
+                            {% elif product.stock > 0 %}
+                                <span class="text-warning fw-semibold">Low Stock</span>
+                            {% else %}
+                                <span class="text-danger fw-semibold">Unavailable</span>
+                            {% endif %}
+                        </td>
+                        <td>
                             <div class="d-flex gap-2 flex-wrap">
                                 <a href="{{ url_for('product_detail', product_id=product.id) }}"
                                    class="btn btn-outline-secondary btn-sm">
                                     <i class="bi bi-eye"></i> View
                                 </a>
-                                <a href="{{ url_for('add_to_cart', product_id=product.id) }}"
-                                   class="btn btn-dark btn-sm">
-                                    <i class="bi bi-cart-plus"></i> Add to Cart
-                                </a>
                                 <a href="{{ url_for('edit_product', product_id=product.id) }}"
                                    class="btn btn-warning btn-sm">
-                                    <i class="bi bi-pencil"></i> Edit
+                                    <i class="bi bi-pencil"></i> Edit Details
                                 </a>
                             </div>
                         </td>

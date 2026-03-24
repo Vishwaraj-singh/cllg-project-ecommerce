@@ -32,7 +32,7 @@
                     </li>
 
                     {% if current_user.is_authenticated %}
-                        {% if current_user.username == 'radhika26' %}
+{% if current_user.is_admin %}
                         <li class="nav-item">
                             <a class="nav-link text-warning fw-semibold" href="{{ url_for('admin_dashboard') }}">
                                 <i class="bi bi-speedometer2"></i> Admin

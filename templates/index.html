@@ -31,7 +31,7 @@
                        class="btn btn-dark btn-sm flex-fill">
                         <i class="bi bi-cart-plus"></i> Add to Cart
                     </a>
-                    {% if current_user.is_authenticated and current_user.username == 'radhika26' %}
+{% if current_user.is_authenticated and current_user.is_admin %}
                     <a href="{{ url_for('edit_product', product_id=product.id) }}"
                        class="btn btn-warning btn-sm w-100">
                         <i class="bi bi-pencil"></i> Edit
