@@ -8,10 +8,15 @@ from datetime import datetime
 
 # ---- APP SETUP ----
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'fallback-dev-key')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+db_url = os.environ.get("postgresql://ecommerce_gauc_user:YpBiKGumVCTr5VWHRRcfX13dqMbprymE@dpg-d710lqvfte5s73ce5fkg-a/ecommerce_gauc")
 
-db.init_app(app)
+if db_url and db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+
 
 # ---- LOGIN MANAGER SETUP ----
 login_manager = LoginManager()
